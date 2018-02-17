@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!-- 
+	Project trying to best visualize student attributes in order to enable
+	optimal decision making when grouping students together. 
+
+  	Thanks to parcoords for a great library! (link below)
+  	http://syntagmatic.github.io/parallel-coordinates/ 
+ -->
+<html>
+  <head>
+  	<meta charset="utf-8"/>
+  	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  	<script id="d3" src="https://d3js.org/d3.v3.js"></script>    	  	
+  	<script src="d3.parcoords.js"></script>
+  	
+  	<link rel="stylesheet" type="text/css" href="d3.parcoords.css">	
+  	<link rel="stylesheet" type="text/css" href="style.css">	
+
+  	<!--  -->
+  	<script id="app" src="http://localhost:8000/index.js"></script>
+
+  	<link rel="shortcut icon" href="">
+  </head>
+  <body ng-app="myApp">    
+    <div align="center">
+    	<h2>
+    		Quantitative information
+    	</h2>
+    </div>
+
+    <!-- D3 uses this canvas  -->
+    <div id="canvas" class="parcoords"></div>
+
+	<div class="modelParams" ng-controller="featureSelectionController">
+		<h4 align="center">Select attributes to include</h4>
+	  	<label ng-repeat="feature in features">
+		  <!--
+		      Use `ng-model="dimension.selected"` to utilize two-way-data-binding. Note that `.selected`
+		      is arbitrary. The property name could be anything and will be created on the object if not present.
+		  -->
+		  <input
+		    type="checkbox"
+		    name="selectedFeatures[]"
+		    value="{{feature.name}}"
+		    ng-model="feature.selected"
+		  > {{feature.name}}
+		</label>
+		<h4 align="center">Choose wave</h4>
+		<select ng-model="selectedInterval" 
+                ng-change="updateInterval()"
+                ng-options="interval.name for interval in intervals"></select>
+	</div>
+  </body>
+</html>
