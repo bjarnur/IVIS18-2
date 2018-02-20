@@ -67,11 +67,43 @@ input {
   width:18%;       
   /*position:relative;
   right: 20px;*/
+  height: 500px;
   margin-right: 1.5%;
   float: right;
   display:inline-block;
   vertical-align:middle;
 }
+
+
+/*
+#countrySelect{  
+  width:80%;       
+  /*position:relative;
+  right: 20px;
+  margin-right: 1.5%;
+  display:inline;
+}
+*/
+
+#countryMenu {
+    width: 90%;
+    float:left;
+    display: block;
+    float:none;
+    margin-top: 100px;
+}
+
+#foo {
+    display:block;
+    float:left;
+}
+
+#bar {
+  display:inline;
+  float:left;
+  padding-right: 10px;
+}
+
 label {
   display: block;
   position:relative;

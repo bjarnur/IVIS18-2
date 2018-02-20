@@ -28,6 +28,7 @@
         <button class="tablinks" onclick="openCity(event, 'analytic1')">WVS analytic trail</button>
         <!--<button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>-->
     </div>
+    
     <div id="visualization" class="tabcontent">
         <div align="center">
             <h2>
@@ -57,7 +58,20 @@
                     ng-change="updateInterval()"
                     ng-options="interval.name for interval in intervals"></select>
         </div>
+        <div id="countryMenu" ng-controller="countrySelectionController">
+            <h4 align="center">Select countries to include</h4>
+                <label id="countrySelect" ng-repeat="country in countries">
+                    <input id="foo"
+                        type="checkbox"
+                        name="selectedCountries[]"
+                        value="{{country.name}}"
+                        ng-model="country.selected"> 
+                    <span id="bar">{{country.name}}</span>
+                    
+                </label>		
+        </div>
     </div>
+    
     <div id="analytic1" class="tabcontent">
         <p>
             Using the World Value Survey's online analysis tool we set out to gather insights into how

@@ -132,6 +132,7 @@ function get_attr_value(data, attribute_name) {
 Filters data based on query selection */
 function filter_data(data) {
 	var filtered = [];
+    /*
 	for(var i = 0; i < data.length; i++) {
         for (var key in data[i]) {
             if (data[i].hasOwnProperty(key)) {
@@ -141,7 +142,14 @@ function filter_data(data) {
                 }
             }
         } 
+	}*/
+	console.log(included_countries);
+	for(var i = 0; i < data.length; i++) {
+		if(included_countries.includes(data[i]['Country'])) {
+            filtered.push(data[i]);
+		}
 	}
+	return filtered;
 }
 
 /*
@@ -153,7 +161,7 @@ function load_parallell_coordinates() {
 		filename, 
 		function(d) { return load_full_records(d); }, 
 		function(error, data) {
-			filter_data(data);
+			data = filter_data(data);
 			paracords = d3.parcoords()("#canvas")				
 			    .color(function(d) { return get_color(d['Country']); })
 			    .data(data)
@@ -186,7 +194,7 @@ function print_empty_selection() {
 /*
 Returns true if there is no data to print */
 function is_empty_data() {
-	return hidden_features.length == 9;
+	return hidden_features.length == 9 || included_countries.length == 0;
 }
 
 /*
@@ -263,6 +271,75 @@ app.controller('featureSelectionController', ['$scope', 'filterFilter', function
         filename = "http://localhost:8000/d/" + $scope.selectedInterval.name + ".csv"        
         redraw_model();
     }
+}]);
+
+included_countries = [];
+
+/*
+Called from angular controller to update list of hidden features, and redraw model */
+function update_country_selection(selected) {	
+	included_countries = selected;
+	if(is_empty_data()) {
+		print_empty_selection();		
+	}
+	else {
+		redraw_model();
+	}
+}
+
+app.controller('countrySelectionController', ['$scope', 'filterFilter', function ($scope, filterFilter) {
+	
+	//Selection of majors
+	$scope.countries = [
+	
+        {name: 'Albania', selected: true},
+        {name: 'Argentina', selected: true},
+        {name: 'Australia', selected: true},
+        {name: 'Bangladesh', selected: true},
+        {name: 'Belarus', selected: true},
+        {name: 'Chile', selected: true},
+        {name: 'China', selected: true},
+        {name: 'Taiwan', selected: true},
+        {name: 'Colombia', selected: true},
+        {name: 'Czech Rep.', selected: true},
+        {name: 'Estonia', selected: true},
+        {name: 'Finland', selected: true},
+        {name: 'Hungary', selected: true},
+        {name: 'India', selected: true},
+        {name: 'Japan', selected: true},
+        {name: 'South Korea', selected: true},
+        {name: 'Latvia', selected: true},
+        {name: 'Lithuania', selected: true},
+        {name: 'Mexico', selected: true},
+        {name: 'New Zealand', selected: true},
+        {name: 'Nigeria', selected: true},
+        {name: 'Norway', selected: true},
+        {name: 'Philippines', selected: true},
+        {name: 'Poland', selected: true},
+        {name: 'South Africa', selected: true},
+        {name: 'Spain', selected: true},
+        {name: 'Sweden', selected: true},
+        {name: 'Switzerland', selected: true},
+        {name: 'Turkey', selected: true},
+        {name: 'Ukraine', selected: true},
+        {name: 'United States', selected: true},
+	];
+
+	// Selected majors
+	$scope.selectedCountries = [];
+
+	// Helper method to get selected features
+	$scope.selectedCountries = function selectedCountries() {	  	
+		return filterFilter($scope.countries, { selected: true });
+  	};
+
+	//Update list of included majors
+	$scope.$watch('countries|filter:{selected:true}', function (nv) {
+		$scope.selectedCountries = nv.map(function (country) {
+	  		return country.name;
+		});
+		update_country_selection($scope.selectedCountries);
+	}, true);
 }]);
 
 
