@@ -21,34 +21,75 @@
 
   	<link rel="shortcut icon" href="">
   </head>
-  <body ng-app="myApp">    
-    <div align="center">
-    	<h2>
-    		Quantitative information
-    	</h2>
+  <body ng-app="myApp">
+  <!-- Tab links -->
+    <div class="tab">
+        <button id="vistab" class="tablinks" onclick="openCity(event, 'visualization')">Visualization</button>
+        <button class="tablinks" onclick="openCity(event, 'analytic1')">WVS analytic trail</button>
+        <!--<button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>-->
     </div>
+    <div id="visualization" class="tabcontent">
+        <div align="center">
+            <h2>
+                Cool Visualization
+            </h2>
+        </div>  
 
-    <!-- D3 uses this canvas  -->
-    <div id="canvas" class="parcoords"></div>
+        <!-- D3 uses this canvas  -->
+        <div id="canvas" class="parcoords"></div>
 
-	<div class="modelParams" ng-controller="featureSelectionController">
-		<h4 align="center">Select attributes to include</h4>
-	  	<label ng-repeat="feature in features">
-		  <!--
-		      Use `ng-model="dimension.selected"` to utilize two-way-data-binding. Note that `.selected`
-		      is arbitrary. The property name could be anything and will be created on the object if not present.
-		  -->
-		  <input
-		    type="checkbox"
-		    name="selectedFeatures[]"
-		    value="{{feature.name}}"
-		    ng-model="feature.selected"
-		  > {{feature.name}}
-		</label>
-		<h4 align="center">Choose wave</h4>
-		<select ng-model="selectedInterval" 
-                ng-change="updateInterval()"
-                ng-options="interval.name for interval in intervals"></select>
-	</div>
+        <div class="modelParams" ng-controller="featureSelectionController">
+            <h4 align="center">Select attributes to include</h4>
+            <label ng-repeat="feature in features">
+            <!--
+                Use `ng-model="dimension.selected"` to utilize two-way-data-binding. Note that `.selected`
+                is arbitrary. The property name could be anything and will be created on the object if not present.
+            -->
+            <input
+                type="checkbox"
+                name="selectedFeatures[]"
+                value="{{feature.name}}"
+                ng-model="feature.selected"
+            > {{feature.name}}
+            </label>
+            <h4 align="center">Choose wave</h4>
+            <select ng-model="selectedInterval" 
+                    ng-change="updateInterval()"
+                    ng-options="interval.name for interval in intervals"></select>
+        </div>
+    </div>
+    <div id="analytic1" class="tabcontent">
+        <p>
+            Using the World Value Survey's online analysis tool we set out to gather insights into how
+            happy people feel and how people's happiness might relate to other factors. To begin with we 
+            choose a wave (i.e. a time period) to examine.        
+        </p>
+        <img src="/analytic_trails/wvs/1.png" alt="wvs image 1">
+        <p>
+            Next step is selecting countries to include. We decide to keep the list of countries small to 
+            simplify the following steps. 
+        </p>        
+        <img src="/analytic_trails/wvs/2.png" alt="wvs image 2">     
+        <p>
+            Now it's time to select which attribute to observe. Note that we can only choose a single attribute 
+            here. 
+        </p>        
+        <img src="/analytic_trails/wvs/3.png" alt="wvs image 3">
+        <p>
+            Having chosen an attribute we are offered several options. We can get a visual representation of the attribute,
+            we can break the results down based on seveal values (includeing martal status, gender, size of home town and more), 
+            and we can choose to exclude non-direct answers. Finally we can press the arrow buttons to browse through other 
+            attributes, this way we can compare values and try to find some relationships between attributes. 
+        </p>        
+        <img src="/analytic_trails/wvs/4.png" alt="wvs image 4">
+        <p>
+            We choose an additional attribute to examine, however since we can only look an one variable at a time trying 
+            to find any relationships between the attributes is quite clumbersome. From the quick analysis we have done now 
+            we could for example hypothesize that there is a positive correlation between happiness and how willing people are to 
+            help one another. 
+        </p>        
+        <img src="/analytic_trails/wvs/_1.png" alt="wvs image _1">
+        
+    </div>
   </body>
 </html>

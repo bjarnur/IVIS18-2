@@ -26,8 +26,38 @@ var features = ['Country', 'leisure_very_important',
                 'child_manners_important','child_hard_work_important',
                 'child_independence_important']
                 
-var filename = "http://localhost:8000/data/1994-1998.csv";
+var filename = "http://localhost:8000/data/all.csv";
 
+
+function openCity(evt, cityName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+    redraw_model();
+} 
+
+function initializeTabs() {
+    
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById("visualization").style.display = "block";
+    document.getElementById("vistab").className += " active";
+    redraw_model();
+} 
 
 /*
 Loads all records of all entries in dataset */
@@ -44,6 +74,8 @@ function load_full_records(data) {
     var happy1 = (+data.very_happy);
     var happy2 = (+data.quite_happy);
     var happy = happy1 + happy2;
+    
+    //console.log(data);
 
     return {        
         //very_happy : +data.very_happy,
@@ -53,6 +85,7 @@ function load_full_records(data) {
         //leisure_very_important : +data.leisure_very_important,
         //leisure_rather_important : + data.leisure_rather_important,
         Country : data.Country,        
+        wave : +data.wave,
         leisure_important : +leisure,
         job_security_important : +data.job_security_important,
         job_achievement_important : +data.job_achievement_important,
@@ -60,7 +93,7 @@ function load_full_records(data) {
         happy : + happy,
         child_manners_important : +data.child_manners_important,
         child_hard_work_important : +data.child_hard_work_important,
-        child_independence_important : +data.child_independence_important		
+        child_independence_important : +data.child_independence_important        
 	};
 }
 
@@ -100,7 +133,14 @@ Filters data based on query selection */
 function filter_data(data) {
 	var filtered = [];
 	for(var i = 0; i < data.length; i++) {
-        console.log(data[i]['Country']);
+        for (var key in data[i]) {
+            if (data[i].hasOwnProperty(key)) {
+                if(data[i][key] == -1) {
+                    console.log("12");
+                    data[i][key] = null;
+                }
+            }
+        } 
 	}
 }
 
@@ -108,12 +148,12 @@ function filter_data(data) {
 Load data from .csv file, and render Parallell Coordinates*/
 function load_parallell_coordinates() {
 	
-	d3.csv(	
+	console.log(filename);
+    d3.csv(	
 		filename, 
 		function(d) { return load_full_records(d); }, 
 		function(error, data) {
 			filter_data(data);
-            console.log(data.Country);
 			paracords = d3.parcoords()("#canvas")				
 			    .color(function(d) { return get_color(d['Country']); })
 			    .data(data)
@@ -122,7 +162,8 @@ function load_parallell_coordinates() {
 			    .render()
 			    .shadows()
 			    .reorderable()
-			    .brushMode("1D-axes");			    
+			    .brushMode("1D-axes");
+                
 
 			paracords.svg.selectAll(".dimension")
 				//.on("click", change_color)
@@ -166,6 +207,7 @@ function redraw_model() {
 	//TODO: Currently redrawing whole model, might be a better way to do this
 	d3.select("#canvas").html("");
 	load_parallell_coordinates();
+    //d3.select("#canvas").on("mouseover");
 }
 
 
@@ -175,6 +217,7 @@ app.controller('featureSelectionController', ['$scope', 'filterFilter', function
     
 	  $scope.features = [
 		{ name: 'Country', key: 'Country', selected: true},		
+        { name: 'Wave number', key: 'wave', selected: true},
         { name: 'Leisure', key: 'leisure_important', selected: true},
 		{ name: 'Job Security', key: 'job_security_important', selected: true},
 		{ name: 'Job Achievement', key: 'job_achievement_important', selected: true},
@@ -182,7 +225,7 @@ app.controller('featureSelectionController', ['$scope', 'filterFilter', function
         { name: 'Overall happiness', key: 'happy', selected: false},
 		{ name: 'Child manners', key: 'child_manners_important', selected: false},
 		{ name: 'Child industriousness', key: 'child_hard_work_important', selected: true},
-		{ name: 'Child independence', key: 'child_independence_important', selected: false},
+		{ name: 'Child independence', key: 'child_independence_important', selected: false},        
         //{ name: 'very_happy', selected: false},
 		//{ name: 'quite_happy', selected: false},
         //{ name: 'family_very_important', selected: false},
@@ -208,15 +251,16 @@ app.controller('featureSelectionController', ['$scope', 'filterFilter', function
 	  }, true);
       
     $scope.intervals = [
+        {name: 'all', key: '0'},
         {name: '1994-1998', key: '1'},
         {name: '1999-2004', key: '2'},
         {name: '2005-2009', key: '3'},
-        {name: '2010-2014', key: '4'},
+        {name: '2010-2014', key: '4'},        
     ];
     $scope.selectedInterval = $scope.intervals[0];
     
     $scope.updateInterval = function() {        
-        filename = "http://localhost:8000/data/" + $scope.selectedInterval.name + ".csv"        
+        filename = "http://localhost:8000/d/" + $scope.selectedInterval.name + ".csv"        
         redraw_model();
     }
 }]);
@@ -224,4 +268,9 @@ app.controller('featureSelectionController', ['$scope', 'filterFilter', function
 
 /*
 Iniital construction of Parallell Coordinates */
-document.addEventListener('DOMContentLoaded', function() { console.log('hello'); load_parallell_coordinates(); });
+document.addEventListener('DOMContentLoaded', function() { 
+    
+    load_parallell_coordinates(); 
+    initializeTabs();
+    
+});
