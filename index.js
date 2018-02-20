@@ -268,7 +268,7 @@ app.controller('featureSelectionController', ['$scope', 'filterFilter', function
     $scope.selectedInterval = $scope.intervals[0];
     
     $scope.updateInterval = function() {        
-        filename = "http://localhost:8000/d/" + $scope.selectedInterval.name + ".csv"        
+        filename = "http://localhost:8000/data/" + $scope.selectedInterval.name + ".csv"        
         redraw_model();
     }
 }]);

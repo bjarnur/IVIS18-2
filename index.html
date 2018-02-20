@@ -26,14 +26,25 @@
     <div class="tab">
         <button id="vistab" class="tablinks" onclick="openCity(event, 'visualization')">Visualization</button>
         <button class="tablinks" onclick="openCity(event, 'analytic1')">WVS analytic trail</button>
+        <button class="tablinks" onclick="openCity(event, 'analytic2')">Custom analytic trail</button>
+        <button class="tablinks" onclick="openCity(event, 'lessons')">Lessons learned</button>
         <!--<button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>-->
     </div>
     
     <div id="visualization" class="tabcontent">
         <div align="center">
             <h2>
-                Cool Visualization
+                World Value visualization
             </h2>
+            <p style="padding-bottom:5px">
+                An interactive model visualizing 20 years worth of results from the World Value Survey. Note that not all results
+                are available for all time periods, and that no value available is represented with the value -1 (this can make 
+                the model a bit harder to read at times, and in retrospect this is something that should have been avoided).
+            </p>
+            <p style="padding-bottom:20px">
+                In addition to choosing which attributes and countries to display you can choose which out of four waves to display. The
+                default choice is to display combined data from all waves. 
+            </p>
         </div>  
 
         <!-- D3 uses this canvas  -->
@@ -59,7 +70,7 @@
                     ng-options="interval.name for interval in intervals"></select>
         </div>
         <div id="countryMenu" ng-controller="countrySelectionController">
-            <h4 align="center">Select countries to include</h4>
+            <h4 align="center" >Select countries to include</h4>
                 <label id="countrySelect" ng-repeat="country in countries">
                     <input id="foo"
                         type="checkbox"
@@ -102,8 +113,59 @@
             we could for example hypothesize that there is a positive correlation between happiness and how willing people are to 
             help one another. 
         </p>        
-        <img src="/analytic_trails/wvs/_1.png" alt="wvs image _1">
-        
+        <img src="/analytic_trails/wvs/_1.png" alt="wvs image _1">        
     </div>
+    <div id="analytic2" class="tabcontent">
+        <p>
+            Use my visualization to draw some insights from the data. The data is overwhelming at first, but as we have been trained
+            to do, we do not panic! 
+        </p>
+        <img src="/analytic_trails/custom/1.png" style="width: 60%" alt="wvs image 1">
+        <p>
+            Filter away entities and attributes tath we are not interested in in order to reveal useful insights. 
+        </p>        
+        <img src="/analytic_trails/custom/2.png" style="width: 60%" alt="wvs image 2">     
+        <p>
+            We carry out a similar investigation as we did before, only this time it's considerably much faster to carry out, and the 
+            results are much more readable. 
+        </p>        
+        <img src="/analytic_trails/custom/3.png" style="width: 60%" alt="wvs image 3">
+        <img src="/analytic_trails/custom/4.png" style="width: 60%" alt="wvs image 4">
+        <img src="/analytic_trails/custom/5.png" style="width: 60%" alt="wvs image 5">
+        <p>
+            Seems that there is a positive correlation between overall happiness and how important people consider their leasure time
+            for the countries we have examined. However this might be coincidental, need to examine more countries. 
+        </p>        
+        <img src="/analytic_trails/custom/6.png" style="width: 60%" alt="wvs image 6">
+        <p>
+            Indeed we see that this seems to generally be the case. By being able to examine so many entities at the same time makes it 
+            easy for us to find correlations in the data. 
+        </p>       
+        <img src="/analytic_trails/custom/7.png" style="width: 60%" alt="wvs image 7">
+        <p>
+            We filter away those that seem fairly consistent. To relveal some more interesting relations between happiness and other 
+            attributes in our data. 
+        </p>       
+        <img src="/analytic_trails/custom/9.png" style="width: 60%" alt="wvs image 9">
+        <p>
+            Notice that missing values are represented with the value -1. In retrospect this was a poor design choice that can make the 
+            model a bit harder to read. We add some brushing to get rid of any missing values, and see the following negative correlations. 
+        </p>
+        <img src="/analytic_trails/custom/13.png" style="width: 60%" alt="wvs image 13">
+    </div>
+    <div id="lessons" class="tabcontent">
+        <p>
+            <span style="font-weight: bold">Lesson one:</span> Processing data takes a *lot* of time, think the proces through before starting! 
+            I chose to download time series data from the World Value Survey website (see below). The benefit was fewer downloads (only one file per attribute). 
+            However the structure of the files makes processing the data hard to automate. 
+        </p>
+        <img src="/analytic_trails/lessons/1.png" alt="wvs image 1">
+        <p>
+            <span style="font-weight: bold">Lesson two:</span> I decided to represent missing values with -1. Bad choice because it can make 
+            the visualization hard to read at times. Users can avoid this issue by using brushing, however this is something that one would 
+            ideally handle in implementation. 
+        </p>
+        <img src="/analytic_trails/lessons/2.png" alt="wvs image 2">
+    </dib>
   </body>
 </html>

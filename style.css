@@ -86,11 +86,8 @@ input {
 */
 
 #countryMenu {
-    width: 90%;
-    float:left;
+    width: 90%;    
     display: block;
-    float:none;
-    margin-top: 100px;
 }
 
 #foo {
@@ -150,3 +147,15 @@ label {
     border: 1px solid #ccc;
     border-top: none;
 } 
+
+/* Style the tab content */
+.tabcontent p {
+    width: 80%;
+    font-size: 18px;    
+} 
+
+.tabcontent img {
+    width: 40%;
+    font-size: 14px;    
+} 
+
